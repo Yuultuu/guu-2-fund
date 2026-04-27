@@ -1,26 +1,27 @@
 def sumL(l2):
-    if len(l2) != 0:
-        return l2[0] + sumL(l2[1:])
-    return 0
+    if len(l2) != 0:          # если список не пустой —
+        return l2[0] + sumL(l2[1:])  # берём первый элемент + сумма остатка (рекурсия)
+    return 0                  # если список пустой — возвращаем 0
 
-def maxL(l2,maxim):
-    if len(l2) != 0:
-        if l2[0] >= maxim:
-            return maxL(l2[1:], l2[0])
-        return maxL(l2[1:], maxim)
-    return maxim
+def maxL(l2, maxim):
+    if len(l2) != 0:          # если список не пустой —
+        if l2[0] >= maxim:    # если первый элемент больше текущего максимума —
+            return maxL(l2[1:], l2[0])   # передаём его как новый максимум
+        return maxL(l2[1:], maxim)       # иначе максимум не меняется
+    return maxim              # список пустой — возвращаем найденный максимум
 
-def minL(l2,minum):
-    if len(l2) != 0:
-        if l2[0] <= minum:
-            return minL(l2[1:], l2[0])
-        return minL(l2[1:], minum)
-    return minum
+def minL(l2, minum):
+    if len(l2) != 0:          # если список не пустой —
+        if l2[0] <= minum:    # если первый элемент меньше текущего минимума —
+            return minL(l2[1:], l2[0])   # передаём его как новый минимум
+        return minL(l2[1:], minum)       # иначе минимум не меняется
+    return minum              # список пустой — возвращаем найденный минимум
 
 l2 = [1, 3, 7, 9, 2, 7]
 maxim = 0
-minum = maxL(l2,maxim)
+minum = maxL(l2, maxim)      # ищем максимум — он станет начальным значением для minL
+                              # логика: минимум не может быть больше максимума
 
-print(sumL(l2))
-print(maxL(l2,maxim))
-print(minL(l2,minum))
+print(sumL(l2))              # сумма всех элементов → 29
+print(maxL(l2, maxim))       # максимальный элемент → 9
+print(minL(l2, minum))       # минимальный элемент → 1
