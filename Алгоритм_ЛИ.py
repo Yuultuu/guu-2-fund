@@ -1,37 +1,36 @@
-from collections import deque
+from collections import deque  # deque — очередь для обхода графа в ширину
 
 def lee(g, start, end):
-    q = deque([start])
-    dist = {start: 0}
-    parent = {start: None}
+    q = deque([start])       # очередь: начинаем с стартового узла
+    dist = {start: 0}        # расстояние от старта до каждого узла
+    parent = {start: None}   # родитель каждого узла (для восстановления пути)
 
-    while q:
-        v = q.popleft()
-        if v == end:
+    while q:                          # пока очередь не пуста —
+        v = q.popleft()               # берём узел из начала очереди
+        if v == end:                  # если дошли до конца — останавливаемся
             break
-        for n in g.get(v, []):
-            if n not in dist:
-                dist[n] = dist[v] + 1
-                parent[n] = v
-                q.append(n)
+        for n in g.get(v, []):        # перебираем соседей текущего узла
+            if n not in dist:         # если сосед ещё не посещён —
+                dist[n] = dist[v] + 1 # расстояние до него = расстояние до v + 1
+                parent[n] = v         # запоминаем откуда пришли
+                q.append(n)           # добавляем соседа в очередь
 
-    if end not in parent:
+    if end not in parent:    # если до конца не добрались — пути нет
         return None
 
     path = []
     v = end
-    while v:
-        path.append(v)
-        v = parent[v]
-
-        return path[::-1], dist[end]
-
+    while v:                 # идём от конца к началу по цепочке родителей
+        path.append(v)       # добавляем узел в путь
+        v = parent[v]        # переходим к родителю
+                             # ← return был здесь внутри цикла (баг!)
+    return path[::-1], dist[end]  # разворачиваем путь от start до end
 
 g = {
-'A': ['B', 'C'],
-'B': ['C', 'D'],
-'C': ['D'],
-'D': []
+    'A': ['B', 'C'],   # из A можно попасть в B и C
+    'B': ['C', 'D'],   # из B можно попасть в C и D
+    'C': ['D'],        # из C можно попасть в D
+    'D': []            # D — конечный узел, выходов нет
 }
 
-print(lee(g, 'A', 'D'))
+print(lee(g, 'A', 'D'))  # → (['A', 'B', 'D'], 2)
