@@ -1,30 +1,42 @@
 import timeit
 import random
 
+# ─── Бинарный поиск ───────────────────────────────────────────
 def search():
+    """Перебирает все пары (x, y) из списка test
+    и для каждой запускает бинарный поиск."""
     for x, y in test:
         binary_search(0, x)
 
 def binary_search(left, right):
-    if left > right:
+    """Рекурсивный бинарный поиск числа z, при котором z + y == x.
+    
+    Ищет в диапазоне [left, right].
+    mid — текущая «середина» диапазона (кандидат на ответ).
+    """
+    if left > right:          # диапазон пуст — решения нет
         return None
 
-    mid = (left + right) // 2
-    if mid + y == x:
+    mid = (left + right) // 2  # берём середину диапазона
+
+    if mid + y == x:            # нашли: mid + y равно x
         return mid
-    elif mid + y < x:
+    elif mid + y < x:           # середина слишком мала — ищем правее
         return binary_search(mid + 1, right)
-    else:
+    else:                       # середина слишком велика — ищем левее
         return binary_search(left, mid - 1)
 
+# ─── Генерация тестовых данных ─────────────────────────────────
 test = []
 for _ in range(4000):
-    x = random.randint(10, 1000)
-    y = random.randint(1, x - 1)
-    test.append((x, y))
+    x = random.randint(10, 1000)   # случайное число от 10 до 1000
+    y = random.randint(1, x - 1)   # случайное число от 1 до x-1
+    test.append((x, y))            # гарантировано: y < x, решение всегда есть
 
-x, y = test[1]
-z = binary_search(0, x)
-print((z+y)-x)
+# ─── Проверка корректности на одном примере ────────────────────
+x, y = test[1]          # берём вторую пару из списка
+z = binary_search(0, x) # ищем z такое, что z + y == x
+print((z + y) - x)      # должно напечатать 0, если всё верно
 
-print(timeit.timeit(search, number=1))
+# ─── Замер скорости ────────────────────────────────────────────
+print(timeit.timeit(search, number=1))  # время выполнения search() один раз
