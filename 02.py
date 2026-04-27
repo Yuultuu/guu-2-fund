@@ -1,30 +1,36 @@
 import random
-import timeit
 
-def sum_list(list):
-    list_sum = 0
-    for i in range(0, 10, 2):
-        list_sum = list[i] + list[i+1] + list_sum
-    return list_sum
+# random — модуль для генерации случайных чисел
 
-def prodlist(list):
-    m = list[0]
-    for i in list:
-        if i == 0:
-            break
-        else:
-            m = m * i
-    return m
+# ─── Сумма всех элементов списка ──────────────────────────────
+def sum_list(lst):
+    return sum(lst)        # sum() складывает все элементы списка
 
-def filter(list, x):
-    greater = [n for n in list if n > x]
-    less = [n for n in list if n < x]
-    return greater, less
+# ─── Произведение элементов списка ────────────────────────────
+def prod_list(lst):
+    m = 1                  # начальное значение произведения
+    for i in lst:          # перебираем каждый элемент списка
+        if i == 0:         # если элемент ноль —
+            return 0       # возвращаем 0, произведение обнуляется
+        m *= i             # умножаем накопленное произведение на элемент
+    return m               # возвращаем итоговое произведение
 
-x = 5
-list = [random.randint(0, 10) for _ in range(10)]
-list.sort()
+# ─── Фильтрация по порогу ─────────────────────────────────────
+def filter_list(lst, x):
+    greater = [n for n in lst if n > x]  # элементы строго больше x
+    less    = [n for n in lst if n < x]  # элементы строго меньше x
+    return greater, less                 # возвращаем оба списка
 
-greater, less = filter(list, x)
+# ─── Основная программа ───────────────────────────────────────
+x = 5                                              # порог для фильтрации
+lst = [random.randint(0, 10) for _ in range(10)]  # 10 случайных чисел от 0 до 10
+lst.sort()                                         # сортируем по возрастанию
+greater, less = filter_list(lst, x)               # делим список по порогу x=5
 
-print(list,"\n",list[0],"\n",list[-1],"\n",sum_list(list),"\n",prodlist(list),"\n",greater,"\n",less)
+print("Список:      ", lst)              # весь отсортированный список
+print("Минимум:     ", lst[0])           # наименьший элемент
+print("Максимум:    ", lst[-1])          # наибольший элемент
+print("Сумма:       ", sum_list(lst))    # сумма всех элементов
+print("Произведение:", prod_list(lst))   # произведение всех элементов
+print("Больше", x, ":  ", greater)      # элементы больше 5
+print("Меньше", x, ":  ", less)         # элементы меньше 5
